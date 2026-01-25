@@ -134,7 +134,246 @@ impl Ijvm {
 
     /// Step (perform) one instruction.
     pub fn step(&mut self) {
-        // TODO: implement me
+        let instruction_result = self.get_instruction();
+        match instruction_result {
+            Ok(_) => {
+            }
+            Err(e) => {
+                println!("Error fetching instruction: {}", e);
+                self.halt();
+                return;
+            }
+        }
+        let instruction = instruction_result.unwrap();
+        match instruction {
+            op::BIPUSH => {
+                if let Err(e) = self.ipush() {
+                    println!("Error executing BIPUSH: {}", e);
+                    self.halt();
+                }
+            }
+            op::DUP => {
+                if let Err(e) = self.dup() {
+                    println!("Error executing DUP: {}", e);
+                    self.halt();
+                }
+            }
+            op::ERR => {
+                if let Err(e) = self.err() {
+                    println!("Error executing ERR: {}", e);
+                    self.halt();
+                }
+            }
+            op::GOTO => {
+                if let Err(e) = self.goto() {
+                    println!("Error executing GOTO: {}", e);
+                    self.halt();
+                }
+            }
+            op::IADD => {
+                if let Err(e) = self.iadd() {
+                    println!("Error executing IADD: {}", e);
+                    self.halt();
+                }
+            }
+            op::IAND => {
+                if let Err(e) = self.iand() {
+                    println!("Error executing IAND: {}", e);
+                    self.halt();
+                }
+            }
+            op::IFEQ => {
+                if let Err(e) = self.ifeq() {
+                    println!("Error executing IFEQ: {}", e);
+                    self.halt();
+                }
+            }
+            op::IFLT => {
+                if let Err(e) = self.iflt() {
+                    println!("Error executing IFLT: {}", e);
+                    self.halt();
+                }
+            }
+            op::IF_ICMPEQ => {
+                if let Err(e) = self.if_icmpeq() {
+                    println!("Error executing IF_ICMPEQ: {}", e);
+                    self.halt();
+                }
+            }
+            op::IINC => {
+                if let Err(e) = self.iinc() {
+                    println!("Error executing IINC: {}", e);
+                    self.halt();
+                }
+            }
+            op::ILOAD => {
+                if let Err(e) = self.iload() {
+                    println!("Error executing ILOAD: {}", e);
+                    self.halt();
+                }
+            }
+            op::IN => {
+                if let Err(e) = self.in_command() {
+                    println!("Error executing IN: {}", e);
+                    self.halt();
+                }
+            }
+            op::INVOKEVIRTUAL => {
+                if let Err(e) = self.invokevirtual() {
+                    println!("Error executing INVOKEVIRTUAL: {}", e);
+                    self.halt();
+                }
+            }
+            op::IOR => {
+                if let Err(e) = self.ior() {
+                    println!("Error executing IOR: {}", e);
+                    self.halt();
+                }
+            }
+            op::IRETURN => {
+                if let Err(e) = self.ireturn() {
+                    println!("Error executing IRETURN: {}", e);
+                    self.halt();
+                }
+            }
+            op::ISTORE => {
+                if let Err(e) = self.istore() {
+                    println!("Error executing ISTORE: {}", e);
+                    self.halt();
+                }
+            }
+            op::ISUB => {
+                if let Err(e) = self.isub() {
+                    println!("Error executing ISUB: {}", e);
+                    self.halt();
+                }
+            }
+            op::LDC_W => {
+                if let Err(e) = self.ldc_w() {
+                    println!("Error executing LDC_W: {}", e);
+                    self.halt();
+                }
+            }
+            op::NOP => {
+                if let Err(e) = self.nop() {
+                    println!("Error executing NOP: {}", e);
+                    self.halt();
+                }
+            }
+            op::OUT => {
+                if let Err(e) = self.out() {
+                    println!("Error executing OUT: {}", e);
+                    self.halt();
+                }
+            }
+            op::POP => {
+                if let Err(e) = self.pop() {
+                    println!("Error executing POP: {}", e);
+                    self.halt();
+                }
+            }
+            op::SWAP => {
+                if let Err(e) = self.swap() {
+                    println!("Error executing SWAP: {}", e);
+                    self.halt();
+                }
+            }
+            op::WIDE => {
+                if let Err(e) = self.wide() {
+                    println!("Error executing WIDE: {}", e);
+                    self.halt();
+                }
+            }
+            op::TAILCALL => {
+                if let Err(e) = self.tailcall() {
+                    println!("Error executing TAILCALL: {}", e);
+                    self.halt();
+                }
+            }
+            op::NEWARRAY => {
+                if let Err(e) = self.newarray() {
+                    println!("Error executing NEWARRAY: {}", e);
+                    self.halt();
+                }
+            }
+            op::IALOAD => {
+                if let Err(e) = self.iaload() {
+                    println!("Error executing IALOAD: {}", e);
+                    self.halt();
+                }
+            }
+            op::IASTORE => {
+                if let Err(e) = self.iastore() {
+                    println!("Error executing IASTORE: {}", e);
+                    self.halt();
+                }
+            }
+            op::ANEWARRAY => {
+                if let Err(e) = self.anewarray() {
+                    println!("Error executing ANEWARRAY: {}", e);
+                    self.halt();
+                }
+            }
+            op::AIALOAD => {
+                if let Err(e) = self.aiaload() {
+                    println!("Error executing AIALOAD: {}", e);
+                    self.halt();
+                }
+            }
+            op::AIASTORE => {
+                if let Err(e) = self.aiastore() {
+                    println!("Error executing AIASTORE: {}", e);
+                    self.halt();
+                }
+            }
+            op::GC => {
+                if let Err(e) = self.gc() {
+                    println!("Error executing GC: {}", e);
+                    self.halt();
+                }
+            }
+            op::NETBIND => {
+                if let Err(e) = self.netbind() {
+                    println!("Error executing NETBIND: {}", e);
+                    self.halt();
+                }
+            }
+            op::NETCONNECT => {
+                if let Err(e) = self.netconnect() {
+                    println!("Error executing NETCONNECT: {}", e);
+                    self.halt();
+                }
+            }
+            op::NETIN => {
+                if let Err(e) = self.netin() {
+                    println!("Error executing NETIN: {}", e);
+                    self.halt();
+                }
+            }
+            op::NETOUT => {
+                if let Err(e) = self.netout() {
+                    println!("Error executing NETOUT: {}", e);
+                    self.halt();
+                }
+            }
+            op::NETCLOSE => {
+                if let Err(e) = self.netclose() {
+                    println!("Error executing NETCLOSE: {}", e);
+                    self.halt();
+                }
+            }
+            
+
+
+            op::HALT => {
+                self.halt();
+            
+            }
+            _ => {
+                println!("Unknown instruction: 0x{:02X}", instruction);
+                self.halt();
+            }
+        }
     }
 
     /// Check whether the machine has any more instructions to execute.
@@ -272,6 +511,117 @@ impl Ijvm {
         } else {
             Err("Index out of bounds".to_string())
         }
+    }
+    fn ipush(&mut self) -> Result<(), String> {
+        Ok(())
+    }
+    fn dup(&mut self) -> Result<(), String> {
+        Ok(())
+    }
+    fn err(&mut self) -> Result<(), String> {
+        Ok(())
+    }
+    fn goto(&mut self) -> Result<(), String> {
+        Ok(())
+    }
+    fn halt(&mut self){
+        
+    }
+    fn iadd(&mut self) -> Result<(), String> {
+        Ok(())
+    }
+    fn iand(&mut self) -> Result<(), String> {
+        Ok(())
+    }
+    fn ifeq(&mut self) -> Result<(), String> {
+        Ok(())
+    }
+    fn iflt(&mut self) -> Result<(), String> {
+        Ok(())
+    }
+    fn if_icmpeq(&mut self) -> Result<(), String> {
+        Ok(())
+    }
+    fn iinc(&mut self) -> Result<(), String> {
+        Ok(())
+    }
+    fn iload(&mut self) -> Result<(), String> {
+        Ok(())
+    }
+    fn in_command(&mut self) -> Result<(), String> {
+        Ok(())
+    }
+    fn invokevirtual(&mut self) -> Result<(), String> {
+        Ok(())
+    }
+    fn ior(&mut self) -> Result<(), String> {
+        Ok(())
+    }
+    fn ireturn(&mut self) -> Result<(), String> {
+        Ok(())
+    }
+    fn istore(&mut self) -> Result<(), String> {
+        Ok(())
+    }
+    fn isub(&mut self) -> Result<(), String> {
+        Ok(())
+    }
+    fn ldc_w(&mut self) -> Result<(), String> {
+        Ok(())
+    }
+    fn nop(&mut self) -> Result<(), String> {
+        Ok(())
+    }
+    fn out(&mut self) -> Result<(), String> {
+        Ok(())
+    }
+    fn pop(&mut self) -> Result<(), String> {
+        Ok(())
+    }
+    fn swap(&mut self) -> Result<(), String> {
+        Ok(())
+    }
+    fn wide(&mut self) -> Result<(), String> {
+        Ok(())
+    }
+    fn tailcall(&mut self) -> Result<(), String> {
+        Ok(())
+    }
+    fn newarray(&mut self) -> Result<(), String> {
+        Ok(())
+    }
+    fn iaload(&mut self) -> Result<(), String> {
+        Ok(())
+    }
+    fn iastore(&mut self) -> Result<(), String> {
+        Ok(())
+    }
+    fn anewarray(&mut self) -> Result<(), String> {
+        Ok(())
+    }
+    fn aiaload(&mut self) -> Result<(), String> {
+        Ok(())
+    }
+    fn aiastore(&mut self) -> Result<(), String> {
+        Ok(())
+    }
+    fn gc(&mut self) -> Result<(), String> {
+        Ok(())
+    }
+    fn netbind(&mut self) -> Result<(), String> {
+        Ok(())
+    }
+    fn netconnect(&mut self) -> Result<(), String> {
+        Ok(())
+    }
+    fn netin(&mut self) -> Result<(), String> {
+        Ok(())
+    }
+    fn netout(&mut self) -> Result<(), String> {
+        Ok(())
+    }
+    fn netclose(&mut self) -> Result<(), String> {
+        Ok(())
     }
 }
 

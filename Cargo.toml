@@ -5,3 +5,11 @@ edition = "2021"
 
 [dependencies]
 # We use standard libraries, but you could add 'byteorder' here if you like.
+
+[[bin]]
+name = "debugger"
+path = "src/debugger.rs"
+
+[[bin]]
+name = "ijvm"
+path = "src/main.rs"
