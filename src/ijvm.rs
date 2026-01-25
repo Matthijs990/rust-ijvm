@@ -98,11 +98,6 @@ pub struct Ijvm {
     // Input/Output streams (equivalent to FILE* in and out)
     input: Box<dyn Read>,
     output: Box<dyn Write>,
-
-    // TODO: Add your variables here (internal state)
-    // program_counter: u32,
-    // stack: Vec<i32>,
-    // text: Vec<u8>,
     program_counter: ProgramCounter,
     stack: Vec<i32>,
     text: Vec<u8>,
@@ -161,9 +156,9 @@ impl Ijvm {
     }
 
     /// Returns the constant at location i in the constant pool.
-    pub fn get_constant(&self, i: u32) -> i32 {
+    pub fn get_constant(&self, i: u32) -> Result<i32, String> {
         // TODO: implement me
-        0
+        Ok(0)
     }
 
     /// Returns the value of the program counter (as an offset from the first instruction).
@@ -175,22 +170,22 @@ impl Ijvm {
     /// This function should return the word at the top of the stack of the current
     /// frame, interpreted as a signed integer.
     /// This operation should NOT pop (remove top element from stack)
-    pub fn tos(&self) -> i32 {
+    pub fn tos(&self) -> Result<i32, String> {
         // TODO: implement me
-        -1
+        Ok(0)
     }
 
     /// Returns the i:th local variable of the current frame.
-    pub fn get_local_variable(&self, i: u32) -> i32 {
+    pub fn get_local_variable(&self, i: u32) -> Result<i32, String> {
         // TODO: implement me
-        0
+        Ok(0)
     }
 
     /// Returns the value of the current instruction represented as a byte.
     /// This should NOT increase the program counter.
-    pub fn get_instruction(&self) -> u8 {
+    pub fn get_instruction(&self) -> Result<u8, String> {
         // TODO: implement me
-        0
+        Ok(0)
     }
 
     // Bonus Methods
