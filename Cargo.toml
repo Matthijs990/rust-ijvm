@@ -1,0 +1,7 @@
+[package]
+name = "ijvm"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+# We use standard libraries, but you could add 'byteorder' here if you like.
