@@ -163,8 +163,7 @@ impl Ijvm {
 
     /// Returns the value of the program counter (as an offset from the first instruction).
     pub fn get_program_counter(&self) -> u32 {
-        // TODO: implement me
-        0
+        self.program_counter.get_pc() 
     }
 
     /// This function should return the word at the top of the stack of the current
@@ -184,9 +183,16 @@ impl Ijvm {
     /// Returns the value of the current instruction represented as a byte.
     /// This should NOT increase the program counter.
     pub fn get_instruction(&self) -> Result<u8, String> {
-        // TODO: implement me
-        Ok(0)
+        if (self.program_counter.get_pc() as usize) < self.text.len() {
+            Ok(self.text[self.program_counter.get_pc() as usize])
+        } else {
+            Err("Program counter out of bounds".to_string())
+        }
     }
+
+
+
+
 
     // Bonus Methods
     
@@ -203,6 +209,69 @@ impl Ijvm {
     pub fn is_tos_reference(&self) -> bool {
         // TODO: implement me if doing precise garbage collection bonus
         false
+    }
+
+    // internal methods
+    fn get_uint32_at(&self, index: u32) -> Result<u32, String> {
+        let start = index as usize;
+        let end = start + 4;
+        if end <= self.text.len() {
+            let bytes: [u8; 4] = self.text[start..end].try_into().unwrap();
+            Ok(u32::from_be_bytes(bytes))
+        } else {
+            Err("Index out of bounds".to_string())
+        }
+    }
+
+
+    fn read_uint32(&mut self) -> Result<u32, String> {
+        let pc = self.program_counter.get_pc();
+        let value = self.get_uint32_at(pc)?;
+        self.program_counter.increment(4);
+        Ok(value)
+    }
+
+    fn read_int32(&mut self) -> Result<i32, String> {
+        let pc = self.program_counter.get_pc();
+        let value = self.get_uint32_at(pc)? as i32;
+        self.program_counter.increment(4);
+        Ok(value)
+    }
+
+    fn get_uint16_at(&self, index: u32) -> Result<u16, String> {
+        let start = index as usize;
+        let end = start + 2;
+        if end <= self.text.len() {
+            let bytes: [u8; 2] = self.text[start..end].try_into().unwrap();
+            Ok(u16::from_be_bytes(bytes))
+        } else {
+            Err("Index out of bounds".to_string())
+        }
+    }
+    fn read_uint16(&mut self) -> Result<u16, String> {
+        let pc = self.program_counter.get_pc();
+        let value = self.get_uint16_at(pc)?;
+        self.program_counter.increment(2);
+        Ok(value)
+    }
+
+    fn read_int16(&mut self) -> Result<i16, String> {
+        let pc = self.program_counter.get_pc();
+        let value = self.get_uint16_at(pc)? as i16;
+        self.program_counter.increment(2);
+        Ok(value)
+    }
+
+
+    fn read_int8(&mut self) -> Result<i8, String> {
+        let pc = self.program_counter.get_pc();
+        if (pc as usize) < self.text.len() {
+            let value = self.text[pc as usize] as i8;
+            self.program_counter.increment(1);
+            Ok(value)
+        } else {
+            Err("Index out of bounds".to_string())
+        }
     }
 }
 
