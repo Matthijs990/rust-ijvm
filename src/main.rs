@@ -2,6 +2,7 @@ use std::env;
 use std::process;
 use std::io;
 
+mod instructions;
 mod ijvm;
 use ijvm::Ijvm;
 

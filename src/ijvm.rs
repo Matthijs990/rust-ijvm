@@ -1,6 +1,7 @@
 use std::io::{Read, Write};
 use std::fs::File;
 use std::convert::TryInto;
+use crate::instructions::Instructions;
 
 // Constants from ijvm.h
 pub const MAGIC_NUMBER: u32 = 0x1DEADFAD;
@@ -96,11 +97,12 @@ impl ProgramCounter {
 
 pub struct Ijvm {
     // Input/Output streams (equivalent to FILE* in and out)
-    input: Box<dyn Read>,
-    output: Box<dyn Write>,
-    program_counter: ProgramCounter,
-    stack: Vec<i32>,
-    text: Vec<u8>,
+    pub(crate) input: Box<dyn Read>,
+    pub(crate) output: Box<dyn Write>,
+    pub(crate) program_counter: ProgramCounter,
+    pub(crate) stack: Vec<i32>,
+    pub(crate) text: Vec<u8>,
+    pub(crate) is_running: bool,
 }
 
 impl Ijvm {
@@ -121,6 +123,7 @@ impl Ijvm {
             program_counter: ProgramCounter::new(),
             stack: Vec::new(),
             text: buffer,
+            is_running: true,
             // Initialize your fields here
         })
     }
@@ -450,8 +453,8 @@ impl Ijvm {
         false
     }
 
-    // internal methods
-    fn get_uint32_at(&self, index: u32) -> Result<u32, String> {
+    // internal methods for helper functions
+    pub(crate) fn get_uint32_at(&self, index: u32) -> Result<u32, String> {
         let start = index as usize;
         let end = start + 4;
         if end <= self.text.len() {
@@ -463,21 +466,21 @@ impl Ijvm {
     }
 
 
-    fn read_uint32(&mut self) -> Result<u32, String> {
+    pub(crate) fn read_uint32(&mut self) -> Result<u32, String> {
         let pc = self.program_counter.get_pc();
         let value = self.get_uint32_at(pc)?;
         self.program_counter.increment(4);
         Ok(value)
     }
 
-    fn read_int32(&mut self) -> Result<i32, String> {
+    pub(crate) fn read_int32(&mut self) -> Result<i32, String> {
         let pc = self.program_counter.get_pc();
         let value = self.get_uint32_at(pc)? as i32;
         self.program_counter.increment(4);
         Ok(value)
     }
 
-    fn get_uint16_at(&self, index: u32) -> Result<u16, String> {
+    pub(crate) fn get_uint16_at(&self, index: u32) -> Result<u16, String> {
         let start = index as usize;
         let end = start + 2;
         if end <= self.text.len() {
@@ -487,14 +490,14 @@ impl Ijvm {
             Err("Index out of bounds".to_string())
         }
     }
-    fn read_uint16(&mut self) -> Result<u16, String> {
+    pub(crate) fn read_uint16(&mut self) -> Result<u16, String> {
         let pc = self.program_counter.get_pc();
         let value = self.get_uint16_at(pc)?;
         self.program_counter.increment(2);
         Ok(value)
     }
 
-    fn read_int16(&mut self) -> Result<i16, String> {
+    pub(crate) fn read_int16(&mut self) -> Result<i16, String> {
         let pc = self.program_counter.get_pc();
         let value = self.get_uint16_at(pc)? as i16;
         self.program_counter.increment(2);
@@ -502,7 +505,7 @@ impl Ijvm {
     }
 
 
-    fn read_int8(&mut self) -> Result<i8, String> {
+    pub(crate) fn read_int8(&mut self) -> Result<i8, String> {
         let pc = self.program_counter.get_pc();
         if (pc as usize) < self.text.len() {
             let value = self.text[pc as usize] as i8;
@@ -512,117 +515,7 @@ impl Ijvm {
             Err("Index out of bounds".to_string())
         }
     }
-    fn ipush(&mut self) -> Result<(), String> {
-        Ok(())
-    }
-    fn dup(&mut self) -> Result<(), String> {
-        Ok(())
-    }
-    fn err(&mut self) -> Result<(), String> {
-        Ok(())
-    }
-    fn goto(&mut self) -> Result<(), String> {
-        Ok(())
-    }
-    fn halt(&mut self){
-        
-    }
-    fn iadd(&mut self) -> Result<(), String> {
-        Ok(())
-    }
-    fn iand(&mut self) -> Result<(), String> {
-        Ok(())
-    }
-    fn ifeq(&mut self) -> Result<(), String> {
-        Ok(())
-    }
-    fn iflt(&mut self) -> Result<(), String> {
-        Ok(())
-    }
-    fn if_icmpeq(&mut self) -> Result<(), String> {
-        Ok(())
-    }
-    fn iinc(&mut self) -> Result<(), String> {
-        Ok(())
-    }
-    fn iload(&mut self) -> Result<(), String> {
-        Ok(())
-    }
-    fn in_command(&mut self) -> Result<(), String> {
-        Ok(())
-    }
-    fn invokevirtual(&mut self) -> Result<(), String> {
-        Ok(())
-    }
-    fn ior(&mut self) -> Result<(), String> {
-        Ok(())
-    }
-    fn ireturn(&mut self) -> Result<(), String> {
-        Ok(())
-    }
-    fn istore(&mut self) -> Result<(), String> {
-        Ok(())
-    }
-    fn isub(&mut self) -> Result<(), String> {
-        Ok(())
-    }
-    fn ldc_w(&mut self) -> Result<(), String> {
-        Ok(())
-    }
-    fn nop(&mut self) -> Result<(), String> {
-        Ok(())
-    }
-    fn out(&mut self) -> Result<(), String> {
-        Ok(())
-    }
-    fn pop(&mut self) -> Result<(), String> {
-        Ok(())
-    }
-    fn swap(&mut self) -> Result<(), String> {
-        Ok(())
-    }
-    fn wide(&mut self) -> Result<(), String> {
-        Ok(())
-    }
-    fn tailcall(&mut self) -> Result<(), String> {
-        Ok(())
-    }
-    fn newarray(&mut self) -> Result<(), String> {
-        Ok(())
-    }
-    fn iaload(&mut self) -> Result<(), String> {
-        Ok(())
-    }
-    fn iastore(&mut self) -> Result<(), String> {
-        Ok(())
-    }
-    fn anewarray(&mut self) -> Result<(), String> {
-        Ok(())
-    }
-    fn aiaload(&mut self) -> Result<(), String> {
-        Ok(())
-    }
-    fn aiastore(&mut self) -> Result<(), String> {
-        Ok(())
-    }
-    fn gc(&mut self) -> Result<(), String> {
-        Ok(())
-    }
-    fn netbind(&mut self) -> Result<(), String> {
-        Ok(())
-    }
-    fn netconnect(&mut self) -> Result<(), String> {
-        Ok(())
-    }
-    fn netin(&mut self) -> Result<(), String> {
-        Ok(())
-    }
-    fn netout(&mut self) -> Result<(), String> {
-        Ok(())
-    }
-    fn netclose(&mut self) -> Result<(), String> {
-        Ok(())
-    }
+
 }
 
 // NOTE: Rust handles endianness natively.
