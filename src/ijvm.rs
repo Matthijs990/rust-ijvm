@@ -51,7 +51,7 @@ pub mod op {
 pub struct ProgramCounter {
     pc: u32,
     breakpoints: Vec<u32>,
-    PassedBreakpoint: bool,
+    passed_breakpoint: bool,
 }
 
 impl ProgramCounter {
@@ -59,7 +59,7 @@ impl ProgramCounter {
         ProgramCounter {
             pc: 0,
             breakpoints: Vec::new(),
-            PassedBreakpoint: false,
+            passed_breakpoint: false,
         }
     }
     pub fn get_pc(&self) -> u32 {
@@ -82,27 +82,30 @@ impl ProgramCounter {
     }
     pub fn increment(&mut self, offset: u32) {
         // check if any breakpoint is passed with loop from current pc to new pc
-        self.PassedBreakpoint = false;
         for bp in &self.breakpoints {
             if *bp > self.pc && *bp <= self.pc + offset {
-                self.PassedBreakpoint = true;
+                self.passed_breakpoint = true;
             }
         }
         self.pc += offset;
     }
+    pub fn reset_passed_breakpoint(&mut self) {
+        self.passed_breakpoint = false;
+    }
     pub fn has_passed_breakpoint(&self) -> bool {
-        self.PassedBreakpoint
+        self.passed_breakpoint
     }
 }
 
 pub struct Ijvm {
     // Input/Output streams (equivalent to FILE* in and out)
-    pub(crate) input: Box<dyn Read>,
-    pub(crate) output: Box<dyn Write>,
-    pub(crate) program_counter: ProgramCounter,
-    pub(crate) stack: Vec<i32>,
-    pub(crate) text: Vec<u8>,
-    pub(crate) is_running: bool,
+    pub input: Box<dyn Read>,
+    pub output: Box<dyn Write>,
+
+    pub program_counter: ProgramCounter,
+    pub stack: Vec<i32>,
+    pub text: Vec<u8>,
+    pub is_running: bool,
 }
 
 impl Ijvm {
